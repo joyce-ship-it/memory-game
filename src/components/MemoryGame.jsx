@@ -4,6 +4,7 @@ import Card from "./Card";
 const MemoryGame = ({ images }) => {
   const [cards, setCards] = React.useState([]);
   const [turns, setTurns] = React.useState(0);
+  const [gameStart, setGameStart] = React.useState(false);
   const [userChoice1, setUserChoice1] = React.useState(null);
   const [userChoice2, setUserChoice2] = React.useState(null);
   console.log(cards);
@@ -25,6 +26,7 @@ const MemoryGame = ({ images }) => {
       setTimeout(() => resetChoice(), 500);
     }
   }, [userChoice2]);
+
   function handleChoice(card) {
     userChoice1 ? setUserChoice2(card) : setUserChoice1(card);
     // console.log(userChoice1, userChoice2);
@@ -34,7 +36,10 @@ const MemoryGame = ({ images }) => {
     setUserChoice2(null);
     setTurns((prevTurns) => prevTurns + 1);
   }
+
   function shuffleCards() {
+    setGameStart(true);
+    setTimeout(() => setGameStart(false), 1000);
     const shuffledCards = [...images, ...images]
       .sort(() => Math.random() - 0.5)
       .map((image) => {
@@ -59,7 +64,8 @@ const MemoryGame = ({ images }) => {
             flipped={
               userChoice1 === card ||
               userChoice2 === card ||
-              card.matched === true
+              card.matched === true ||
+              gameStart
             }
           />
         ))}
